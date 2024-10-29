@@ -1,16 +1,29 @@
 from PyQt5.QtWidgets import QDialog, QLabel, QTableWidgetItem, QVBoxLayout, QTableWidget, QPushButton, QLineEdit,  QSizePolicy
 from PyQt5.QtCore import Qt, QAbstractTableModel
 from PyQt5.QtGui import QIcon
-
+CSV_FILENAME_Writable = r'+.csv'
 ALL_SEARCH_RATE_TYPES = ("EURibor", "SONIA", "EURibor1", "EURibor2", "EURibor3", "EURiborZ")
 from typing import Tuple
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
 import re
+import csv
 _context = 't'
 from datetime import date, timedelta
 from datetime import datetime
 from sonia import sonia
 from typing import List
+
+def MyWriteCsv(filename, data):
+
+    try:
+        with open(filename, mode='w', encoding='utf-8') as f:
+            cwriter = csv.writer(f)
+            cwriter.writerows(data)
+    except IOError as e:
+        print(e)
+    except BaseException:
+        pass
+
 class SearchDialog(QDialog):
 
     def DisplayAfterCall(self):
@@ -37,8 +50,8 @@ class SearchDialog(QDialog):
         today_yyymmdd_str = d.strftime('%Y%m%d')
         view_dialog_shown_euribor = InterActAppearOnceValueDialog.show_changed_euribor_rates(0, "",
              today_yyymmdd_str.rstrip().lstrip())
-
-
+        global CSV_FILENAME_Writable
+        CSV_FILENAME_Writable = r'%s_%s.csv' % ('_RATE_today_yyymmdd_str', today_yyymmdd_str)
         TEXT_Type = ""
         try:
             TEXT_Type = self.line_euribor_date_edit.displayText().lstrip().rstrip()
@@ -165,6 +178,8 @@ class SoniaValueDialog(QDialog):
                  retValues[3 + 0 * 5], retValues[4 + 0 * 5]],
             ]
             model = TableModel(SONIA_WEBSITE_data)
+            CSV_SONIA_FILENAME_Writable = '_Snr' + CSV_FILENAME_Writable + '()HHMiSS.csv'
+            MyWriteCsv(CSV_SONIA_FILENAME_Writable, SONIA_WEBSITE_data)
 
             item_tbl.SetModelWithModel(model, 2, 6)
         except BaseException as tblExcep:
@@ -215,7 +230,7 @@ class InterActAppearOnceValueDialog(QDialog):
         item_tbl.setColumnCount(6)
         item_tbl.setRowCount(6)
 
-        WEBSITE_data = [
+        EURibor_WEBSITE_data = [
             ['item/dat','','','','',''],
             ['1W', '', '', '', '', ''],
             ['1M', '', '', '', '', ''],
@@ -225,7 +240,7 @@ class InterActAppearOnceValueDialog(QDialog):
         ]
 
         try:
-            model = TableModel(WEBSITE_data)
+            model = TableModel(EURibor_WEBSITE_data)
             item_tbl.SetModelWithModel(model, 6, 6)
         except BaseException as tblExcep:
             print(tblExcep)
@@ -259,7 +274,7 @@ class InterActAppearOnceValueDialog(QDialog):
             retDates = retResult[2]
             retItemCurValues = [t.lstrip('>') for t in retResult[1]]
             #
-            WEBSITE_data = [
+            EURibor_WEBSITE_data = [
                 ['item/dat', retDates[0], retDates[1], retDates[2], retDates[3], retDates[4]],
                 ['1W', retItemCurValues[0 + 0 * 5], retItemCurValues[1 + 0 * 5], retItemCurValues[2 + 0 * 5],
                  retItemCurValues[3 + 0 * 5], retItemCurValues[4 + 0 * 5]],
@@ -273,9 +288,11 @@ class InterActAppearOnceValueDialog(QDialog):
                  retItemCurValues[3 + 4 * 5], retItemCurValues[4 + 4 * 5]],
             ]
 
-            model = TableModel(WEBSITE_data)
+            model = TableModel(EURibor_WEBSITE_data)
+            CSV_EURIBOR_FILENAME_Writable = '_Euri' + CSV_FILENAME_Writable + '()HHMiSS.csv'
+            MyWriteCsv(CSV_EURIBOR_FILENAME_Writable, EURibor_WEBSITE_data)
             ###item_tbl.SetWithModel(model)
-            ##item_tbl.SetModelWithModel(model, None, 6, 6)
+
             item_tbl.SetModelWithModel(model, 6, 6)
         except BaseException as tblExcep:
             print(tblExcep)
@@ -421,3 +438,4 @@ class QTableWidgetWithModel(QTableWidget):
                     widgetItem = QTableWidgetItem(tempCell)
                     self.setItem(iRow, iColumn, widgetItem)
         pass
+        
