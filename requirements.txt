@@ -1,0 +1,17 @@
+beautifulsoup4==4.12.3
+Requests==2.32.3
+charset-normalizer==3.4.0
+click==8.1.7
+lxml==5.3.0
+packaging==24.1
+pip==24.2
+pyasn1==0.6.1
+PyQt5==5.15.11
+PyQt5-Qt5==5.15.2
+PyQt5_sip==12.15.0
+PySimpleGUI==5.0.7
+pytz==024.2
+rsa==4.9
+setuptools==75.2.0
+urllib3==2.2.3
+certifi==2024.8.30
