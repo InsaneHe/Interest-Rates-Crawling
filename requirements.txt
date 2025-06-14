@@ -9,7 +9,7 @@ pyasn1==0.6.1
 PyQt5==5.15.11
 PyQt5-Qt5==5.15.2
 PyQt5_sip==12.15.0
-PySimpleGUI==5.0.8
+PySimpleGUI==5.0.8.3
 pytz==2024.2
 rsa==4.9
 setuptools==75.2.0
